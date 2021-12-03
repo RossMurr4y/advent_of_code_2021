@@ -1,6 +1,6 @@
 
 // import input data from part a
-use crate::days::day_two::a::{Direction, get_input_data};
+use crate::days::day_two_a::{Direction, get_input_data};
 
 /// A helper structure to define a position
 struct Position {
@@ -23,7 +23,7 @@ impl Default for Position {
 /// function (move is a keyword apparently) with a matching signature. 
 /// This will make it simple to call each of them. 
 /// It will be up to each implementation to control what it does.
-pub trait Movement {
+trait Movement {
     /// advance will define how movement of a position should occurr
     /// for any given direction
     fn advance(direction: Direction, position: Position) -> Position;
@@ -38,7 +38,7 @@ impl Movement for Direction {
         match direction {
             Direction::Forward(distance) => {
                 new_position.x += distance;
-                new_position.y += (new_position.aim * distance);
+                new_position.y += new_position.aim * distance;
             },
             Direction::Down(distance) => { 
                 new_position.aim += distance; 
@@ -66,9 +66,8 @@ pub fn run() {
         position = Direction::advance(dir, position);
     }
 
+    // multiply our horizontal position by the depth
     let answer = position.x * position.y;
-
-    println!("Day 2B: Final Coordinates: {}, {}", position.x, position.y);
 
     println!("Day 2B: Final Answer: {}", answer);
 }

@@ -19,7 +19,7 @@ impl Default for Position {
 /// function (move is a keyword apparently) with a matching signature. 
 /// This will make it simple to call each of them. 
 /// It will be up to each implementation to control what it does.
-pub trait Movement {
+trait Movement {
     /// advance will define how movement of a position should occurr
     /// for any given direction
     fn advance(direction: Direction, position: Position) -> Position;
@@ -60,11 +60,12 @@ pub fn run() {
 
     // loop over the course, performing `advance` on each
     for dir in planned_course {
-        println!("Advancing: X: {}, Y: {}", position.x, position.y);
         position = Direction::advance(dir, position);
     }
 
-    println!("Day 2A: Final Coordinates: {}, {}", position.x, position.y);
+    let answer = position.x * position.y;
+
+    println!("Day 2A: Final Answer - {}", answer);
 }
 
 pub fn get_input_data() -> Vec<Direction> {

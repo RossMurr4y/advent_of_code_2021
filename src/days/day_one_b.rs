@@ -1,4 +1,4 @@
-use crate::day_one::a::get_input_data;
+use crate::day_one_a::get_input_data;
 use std::iter::Sum;
 
 /// A function to calculate the window increments
@@ -17,14 +17,10 @@ fn sliding_window_increments(measurements: Vec<i32>) -> i32 {
 
         if first_window < second_window { 
             count += 1;
-            println!("Increment found: First - {}, Second - {}, NewTotal: {}", first_window, second_window, count);
-        } else {
-            println!("No increment found.");
         }
-
     }
 
-    println!("Total Window Increments: {}", count);
+    println!("Day 1B: Final Answer - {}", count);
     count
 }
 

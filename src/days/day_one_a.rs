@@ -6,9 +6,7 @@ pub fn run() {
 
     for measurement in report {
         if prev_measurement.is_some() {
-            println!("Comparing: {} with {}", &measurement, &prev_measurement.unwrap());
             if &measurement > &prev_measurement.expect("No measurement") {
-                println!("Depth has increased: {} is deeper than {}", &measurement, prev_measurement.unwrap());
                 count = count + 1;
             }
         }
@@ -16,7 +14,7 @@ pub fn run() {
         prev_measurement = Option::Some(measurement);
     }
 
-    println!("Total increments: {}", count);
+    println!("Day 1A: Final Answer - {}", count);
 }
 
 // Input data for the day 1 of AOC 2021: 
