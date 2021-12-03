@@ -67,7 +67,7 @@ pub fn run() {
     println!("Day 2A: Final Coordinates: {}, {}", position.x, position.y);
 }
 
-fn get_input_data() -> Vec<Direction> {
+pub fn get_input_data() -> Vec<Direction> {
     vec![
         Direction::Forward(6),
         Direction::Down(2),
