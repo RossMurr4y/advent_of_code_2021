@@ -6,4 +6,6 @@ fn main() {
     // run individual solutions, by their day.
     day_one::a::run();
     day_one::b::run();
+
+    day_two::a::run();
 }
