@@ -1,16 +1,19 @@
-
+pub fn get_puzzle_input() -> core::iter::Enumerate<core::str::Lines<'static>> {
+    include_str!("../inputs/day_three_a.txt")
+        .lines()
+        .enumerate()
+}
 
 pub fn run() {
 
     const WIDTH: usize = 12;
     
-    let puzzle_input = include_str!("../inputs/day_three_a.txt");
-    let pu = puzzle_input.lines().enumerate();
+    let puzzle_input = get_puzzle_input();
 
     let mut zeros = vec![0; WIDTH];
     let mut ones = vec![0; WIDTH];
 
-    for (line_idx, line) in pu {
+    for (line_idx, line) in puzzle_input {
 
         let line_bytes = line.as_bytes().iter().enumerate();
 
