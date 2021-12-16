@@ -1,7 +1,6 @@
-pub fn get_puzzle_input() -> core::iter::Enumerate<core::str::Lines<'static>> {
+pub fn get_puzzle_input() -> core::str::Lines<'static> {
     include_str!("../inputs/day_three_a.txt")
         .lines()
-        .enumerate()
 }
 
 struct Diagnostic {
@@ -11,10 +10,19 @@ struct Diagnostic {
     gamma: Option<usize>,
     // our calculated epsilon rate, if performed yet
     epsilon: Option<usize>,
+    // our calculated oxygen generator rating, if avail
+    oxygen: Option<usize>,
+    // our calculated co2 scrubber rating, if avail
+    scrubber: Option<usize>,
+    // our calculated life support rating, if avail
+    life_support: Option<usize>,
     // our final answer for a, if prepared yet
     answer_a: Option<usize>,
     // our final answer for b, if prepared yet
     answer_b: Option<usize>,
+    //
+    zeros: Option<Vec<usize>>,
+    ones: Option<Vec<usize>>,
 }
 
 impl Diagnostic {
@@ -24,19 +32,24 @@ impl Diagnostic {
             width: 12,
             gamma: None,
             epsilon: None,
+            oxygen: None,
+            scrubber: None,
+            life_support: None,
             answer_a: None,
             answer_b: None,
+            zeros: None,
+            ones: None,
         }
     }
 
-    fn add_gamma_and_epsilon(self: &mut Self) -> &mut Self {
+    fn get_gamma_and_epsilon(self: &mut Self) -> &mut Self {
 
         let puzzle_input = get_puzzle_input();
 
         let mut zeros = vec![0; self.width];
         let mut ones = vec![0; self.width];
 
-        for (line_idx, line) in puzzle_input {
+        for line in puzzle_input {
 
             let line_bytes = line.as_bytes().iter().enumerate();
 
@@ -74,6 +87,10 @@ impl Diagnostic {
             }
         }
 
+        // add the zeros and ones to our struct for later use
+        self.zeros = Some(zeros);
+        self.ones = Some(ones);
+
         // calculate and set gamma value
         self.gamma = Some(usize::from_str_radix(&gamma_rate_binary, 2)
             .expect("Error calculating the gamma_rate_decimal"));
@@ -90,13 +107,52 @@ impl Diagnostic {
         self
     }
 
+    fn get_oxygen_rating(self: &mut Self) -> &mut Self {
+
+        // create a vector of the highest bit in each column
+        // 1's win any ties
+        let o = self.ones.as_ref().expect("No ones are found.");
+        let z = self.zeros.as_ref().expect("No zeroes are found.");
+        let mut highest_values: Vec<usize> = Vec::new();
+        for (i, count_of_ones) in o.iter().enumerate() {
+            if count_of_ones.ge(&z[i]) {
+                highest_values.push(1);
+            } else {
+                highest_values.push(0);
+            }
+        };
+
+        let mut input: Vec<&str> = get_puzzle_input().into();
+        let mut current_index = highest_values.iter();
+        
+        while input.len().ne(&1) {
+            let c = current_index.next().expect("Index could not be set.");
+            input.filter(|&x| (x[(c -1)..*c].parse::<usize>().unwrap()).eq(highest_values.iter().nth(*c).expect("No index exists."))).collect();
+        }
+
+        println!("filtered input: {:#?}", &input);
+
+        todo!()
+    }
+
+    fn get_scrubber_rating(self: &mut Self) -> &mut Self {todo!() }
+
+    fn get_life_support_rating(self: &mut Self) -> &mut Self {todo!()}
+
 }
-
-
 
 pub fn run() {
     
     let mut diagnostic = Diagnostic::new();
-    diagnostic.add_gamma_and_epsilon();
-    println!("Day 3A: Final Answer - {:#?}", diagnostic.answer_a.expect("Unable to calculate answer."));
+    diagnostic.get_gamma_and_epsilon();
+    println!(
+        "Day 3A: Final Answer - {:#?}", 
+        diagnostic.answer_a.expect("Unable to calculate answer - 3A."));
+
+    diagnostic.get_oxygen_rating();
+    diagnostic.get_scrubber_rating();
+    diagnostic.get_life_support_rating();
+    println!(
+        "Day 3B: Final Answer - {:#?}",
+        diagnostic.answer_b.expect("Unable to calculate answer - 3B."));
 }
